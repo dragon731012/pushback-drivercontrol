@@ -27,10 +27,17 @@ motor bottomright = motor(PORT14, ratio18_1, false);
 motor topleft = motor(PORT11, ratio18_1, true);
 motor topright = motor(PORT12, ratio18_1, false);
 
+motor intake1 = motor(PORT15, ratio18_1, false);
+motor intake2 = motor(PORT16, ratio18_1, true);
+motor intake3 = motor(PORT17, ratio18_1, true);
+
+motor wall = motor(PORT11, ratio18_1, true);
+
 controller Controller = controller(primary);
 
 motor_group leftmotors = motor_group(topleft, bottomleft);
 motor_group rightmotors = motor_group(topright, bottomright);
+motor_group intake = motor_group(intake1,intake2,intake3);
 
 digital_out* clinch;
 
@@ -46,20 +53,57 @@ void useClinch() {
   clinch->set(!clinch->value());
 }
 
+void spinIntake(){
+  intake.spin(forward);
+}
+
+void reverseIntake(){
+  intake.spin(reverse);
+}
+
+void stopIntake(){
+  intake.stop();
+}
+
+void wallOut(){
+  wall.spinToPosition(0,degrees);
+}
+
+void wallIn(){
+  wall.spin(forward);
+}
+
+void wallStop(){
+  wall.stop();
+}
+
 void pre_auton(void) {
   vexcodeInit();
 
   leftmotors.setStopping(brake);
   rightmotors.setStopping(brake);
+  wall.setStopping(brake);
+  wall.setPosition(0,degrees);
+
+  intake.setVelocity(100,percent);
 
   clinch->set(false);
 
   Controller.ButtonLeft.pressed(switchtype);
-  Controller.ButtonR1.pressed(useClinch);
+  Controller.ButtonL1.pressed(useClinch);
+
+  Controller.ButtonR1.pressed(spinIntake);
+  Controller.ButtonR1.released(stopIntake);
+  Controller.ButtonR2.pressed(reverseIntake);
+  Controller.ButtonR2.released(stopIntake);
+
+  Controller.ButtonX.pressed(wallOut);
+  Controller.ButtonX.pressed(wallStop);
+  Controller.ButtonB.released(wallIn);
 }
 
 void autonomous(void) {
-  // Autonomous code goes here
+
 }
 
 void usercontrol(void) {
