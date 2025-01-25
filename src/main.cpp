@@ -65,11 +65,11 @@ void stopIntake(){
   intake.stop();
 }
 
-void wallOut(){
+void wallIn(){
   wall.spinToPosition(0,degrees);
 }
 
-void wallIn(){
+void wallOut(){
   wall.spin(forward);
 }
 
@@ -98,7 +98,7 @@ void pre_auton(void) {
   Controller.ButtonR2.released(stopIntake);
 
   Controller.ButtonX.pressed(wallOut);
-  Controller.ButtonX.pressed(wallStop);
+  Controller.ButtonX.released(wallStop);
   Controller.ButtonB.released(wallIn);
 }
 
