@@ -39,6 +39,8 @@ motor_group leftmotors = motor_group(topleft, bottomleft);
 motor_group rightmotors = motor_group(topright, bottomright);
 motor_group intake = motor_group(intake1,intake2,intake3);
 
+drivetrain Drivetrain = drivetrain(leftmotors, rightmotors, 300, 320, 320, mm, 1);
+
 digital_out* clinch;
 
 bool tank = false;
@@ -104,6 +106,7 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
+  Drivetrain.driveFor(forward,10,inches);
 }
 
 void usercontrol(void) {
