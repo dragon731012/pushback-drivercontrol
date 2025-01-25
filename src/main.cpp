@@ -31,7 +31,7 @@ motor intake1 = motor(PORT15, ratio18_1, false);
 motor intake2 = motor(PORT16, ratio18_1, true);
 motor intake3 = motor(PORT17, ratio18_1, true);
 
-motor wall = motor(PORT11, ratio18_1, true);
+motor wall = motor(PORT1, ratio18_1, true);
 
 controller Controller = controller(primary);
 
@@ -83,6 +83,7 @@ void pre_auton(void) {
   leftmotors.setStopping(brake);
   rightmotors.setStopping(brake);
   wall.setStopping(brake);
+  wall.setBrake(hold);
   wall.setPosition(0,degrees);
 
   intake.setVelocity(100,percent);
@@ -103,7 +104,6 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-
 }
 
 void usercontrol(void) {
