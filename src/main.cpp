@@ -39,7 +39,7 @@ motor_group leftmotors = motor_group(topleft, bottomleft);
 motor_group rightmotors = motor_group(topright, bottomright);
 motor_group intake = motor_group(intake1,intake2,intake3);
 
-drivetrain Drivetrain = drivetrain(leftmotors, rightmotors, 300, 320, 320, mm, 1);
+drivetrain dt = drivetrain(leftmotors, rightmotors, 300, 320, 320, mm, 1);
 
 digital_out* clinch;
 
@@ -90,7 +90,7 @@ void pre_auton(void) {
 
   intake.setVelocity(100,percent);
 
-  clinch->set(false);
+  clinch->set(true);
 
   Controller.ButtonLeft.pressed(switchtype);
   Controller.ButtonL1.pressed(useClinch);
@@ -106,7 +106,38 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-  Drivetrain.driveFor(forward,10,inches);
+  //set velocity
+  dt.setDriveVelocity(20,percent);
+  dt.setTurnVelocity(20,percent);
+
+  //do wall stake
+  dt.driveFor(forward,3,inches);
+  dt.turnFor(32,degrees);
+  dt.driveFor(forward,8.5,inches);
+  dt.turnFor(15,degrees);
+  dt.driveFor(forward,1.5,inches);
+  wall.spin(forward);
+  wait(2,sec);
+  wall.stop();
+
+  //get the stake
+  dt.driveFor(reverse,14,inches);
+  dt.turnFor(18, degrees);
+  dt.driveFor(reverse,14,inches);
+  useClinch();
+  
+  //get the first ring
+  dt.driveFor(forward,3, inches);
+  dt.turnFor(32,degrees);
+  intake.spin(forward);
+  dt.driveFor(forward,10,inches);
+  
+  //touch the bar
+  dt.driveFor(reverse,5,inches);
+  dt.turnFor(50,degrees);
+  wall.spinToPosition(0,degrees,false);
+  dt.setDriveVelocity(100,percent);
+  dt.driveFor(forward,15,inches);
 }
 
 void usercontrol(void) {
