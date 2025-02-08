@@ -127,12 +127,13 @@ void autonomous(void) {
   useClinch();
   
   //get the first ring
-  dt.driveFor(forward,3, inches);
+  dt.driveFor(forward,4, inches);
   dt.turnFor(32,degrees);
   intake.spin(forward);
-  dt.driveFor(forward,10,inches);
+  dt.driveFor(forward,11,inches);
   
   //touch the bar
+  dt.setDriveVelocity(50,percent);
   dt.driveFor(reverse,5,inches);
   dt.turnFor(50,degrees);
   wall.spinToPosition(0,degrees,false);
