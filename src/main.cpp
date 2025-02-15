@@ -121,26 +121,28 @@ void autonomous(void) {
   wall.stop();
 
   //get the stake
-  dt.driveFor(reverse,16,inches);
-  dt.turnFor(18, degrees);
+  dt.setDriveVelocity(50,percent);
+  dt.driveFor(reverse,20,inches);
+  dt.setDriveVelocity(20,percent);
+  dt.turnFor(27, degrees);
   dt.setDriveVelocity(30,percent);
   dt.driveFor(reverse,15,inches,false);
   dt.setDriveVelocity(20,percent);
-  wait(1.5,sec);
+  wait(1,sec);
   useClinch();
   wait(0.5,sec);
   
   //get the first ring
   dt.driveFor(forward,6, inches);
-  dt.turnFor(32,degrees);
+  dt.turnFor(22,degrees);
   intake.spin(forward);
-  dt.setDriveVelocity(40,percent);
-  dt.driveFor(forward,11,inches);
+  dt.setDriveVelocity(20,percent);
+  dt.driveFor(forward,15,inches);
   
   //touch the bar
   dt.setDriveVelocity(50,percent);
   dt.driveFor(reverse,5,inches);
-  dt.turnFor(54,degrees);
+  dt.turnFor(56,degrees);
   wall.spinToPosition(0,degrees,false);
   dt.setDriveVelocity(100,percent);
   dt.driveFor(forward,15,inches);
