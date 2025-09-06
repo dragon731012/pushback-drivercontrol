@@ -26,17 +26,20 @@ motor bottomleft = motor(PORT13, ratio18_1, true);
 motor bottomright = motor(PORT14, ratio18_1, false);
 motor topleft = motor(PORT11, ratio18_1, true);
 motor topright = motor(PORT12, ratio18_1, false);
+motor middleleft = motor(PORT9, ratio18_1, true);
+motor middleright = motor(PORT10, ratio18_1, false);
 
 motor intake1 = motor(PORT15, ratio18_1, false);
 motor intake2 = motor(PORT16, ratio18_1, true);
 motor intake3 = motor(PORT17, ratio18_1, true);
+motor intake3 = motor(PORT18, ratio18_1, true);
 
 motor wall = motor(PORT1, ratio18_1, true);
 
 controller Controller = controller(primary);
 
-motor_group leftmotors = motor_group(topleft, bottomleft);
-motor_group rightmotors = motor_group(topright, bottomright);
+motor_group leftmotors = motor_group(topleft, middleleft, bottomleft);
+motor_group rightmotors = motor_group(topright, middleright, bottomright);
 motor_group intake = motor_group(intake1,intake2,intake3);
 
 drivetrain dt = drivetrain(leftmotors, rightmotors, 300, 320, 320, mm, 1);
