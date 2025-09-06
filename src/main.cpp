@@ -34,8 +34,6 @@ motor intake2 = motor(PORT16, ratio18_1, true);
 motor intake3 = motor(PORT17, ratio18_1, true);
 motor intake3 = motor(PORT18, ratio18_1, true);
 
-motor wall = motor(PORT1, ratio18_1, true);
-
 controller Controller = controller(primary);
 
 motor_group leftmotors = motor_group(topleft, middleleft, bottomleft);
@@ -69,26 +67,11 @@ void stopIntake(){
   //intake.stop();
 }
 
-void wallIn(){
-  wall.spinToPosition(0,degrees);
-}
-
-void wallOut(){
-  wall.spin(forward);
-}
-
-void wallStop(){
-  wall.stop();
-}
-
 void pre_auton(void) {
   vexcodeInit();
 
   leftmotors.setStopping(brake);
   rightmotors.setStopping(brake);
-  wall.setStopping(brake);
-  wall.setBrake(hold);
-  wall.setPosition(0,degrees);
 
   //intake.setVelocity(100,percent);
 
@@ -101,14 +84,10 @@ void pre_auton(void) {
   Controller.ButtonR1.released(stopIntake);
   Controller.ButtonR2.pressed(reverseIntake);
   Controller.ButtonR2.released(stopIntake);
-
-  Controller.ButtonX.pressed(wallOut);
-  Controller.ButtonX.released(wallStop);
-  Controller.ButtonB.released(wallIn);
 }
 
 void autonomous(void) {
-  
+
 }
 
 void usercontrol(void) {
