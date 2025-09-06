@@ -40,11 +40,10 @@ controller Controller = controller(primary);
 
 motor_group leftmotors = motor_group(topleft, middleleft, bottomleft);
 motor_group rightmotors = motor_group(topright, middleright, bottomright);
-motor_group intake = motor_group(intake1,intake2,intake3);
 
 drivetrain dt = drivetrain(leftmotors, rightmotors, 300, 320, 320, mm, 1);
 
-digital_out* clinch;
+//digital_out* clinch;
 
 bool tank = false;
 double leftvalue;
@@ -55,19 +54,19 @@ void switchtype() {
 }
 
 void useClinch() {
-  clinch->set(!clinch->value());
+  //clinch->set(!clinch->value());
 }
 
 void spinIntake(){
-  intake.spin(forward);
+  //intake.spin(forward);
 }
 
 void reverseIntake(){
-  intake.spin(reverse);
+  //intake.spin(reverse);
 }
 
 void stopIntake(){
-  intake.stop();
+  //intake.stop();
 }
 
 void wallIn(){
@@ -91,12 +90,12 @@ void pre_auton(void) {
   wall.setBrake(hold);
   wall.setPosition(0,degrees);
 
-  intake.setVelocity(100,percent);
+  //intake.setVelocity(100,percent);
 
-  clinch->set(true);
+  //clinch->set(true);
 
   Controller.ButtonLeft.pressed(switchtype);
-  Controller.ButtonL1.pressed(useClinch);
+  //Controller.ButtonL1.pressed(useClinch);
 
   Controller.ButtonR1.pressed(spinIntake);
   Controller.ButtonR1.released(stopIntake);
@@ -109,46 +108,7 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-  //set velocity
-  dt.setDriveVelocity(20,percent);
-  dt.setTurnVelocity(20,percent);
-
-  //do wall stake
-  dt.driveFor(forward,3,inches);
-  dt.turnFor(32,degrees);
-  dt.driveFor(forward,8.5,inches);
-  dt.turnFor(15,degrees);
-  dt.driveFor(forward,1.5,inches);
-  wall.spin(forward);
-  wait(2,sec);
-  wall.stop();
-
-  //get the stake
-  dt.setDriveVelocity(50,percent);
-  dt.driveFor(reverse,20,inches);
-  dt.setDriveVelocity(20,percent);
-  dt.turnFor(27, degrees);
-  dt.setDriveVelocity(30,percent);
-  dt.driveFor(reverse,15,inches,false);
-  dt.setDriveVelocity(20,percent);
-  wait(1,sec);
-  useClinch();
-  wait(0.5,sec);
   
-  //get the first ring
-  dt.driveFor(forward,6, inches);
-  dt.turnFor(22,degrees);
-  intake.spin(forward);
-  dt.setDriveVelocity(20,percent);
-  dt.driveFor(forward,15,inches);
-  
-  //touch the bar
-  dt.setDriveVelocity(50,percent);
-  dt.driveFor(reverse,5,inches);
-  dt.turnFor(56,degrees);
-  wall.spinToPosition(0,degrees,false);
-  dt.setDriveVelocity(100,percent);
-  dt.driveFor(forward,15,inches);
 }
 
 void usercontrol(void) {
@@ -178,7 +138,7 @@ void usercontrol(void) {
 
 int main() {
   digital_out c(Brain.ThreeWirePort.A);
-  clinch = &c;
+  //clinch = &c;
 
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
