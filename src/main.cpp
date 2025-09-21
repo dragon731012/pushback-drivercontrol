@@ -23,16 +23,17 @@ using namespace vex;
 competition Competition;
 
 motor bottomleft = motor(PORT13, ratio18_1, true);
-motor bottomright = motor(PORT14, ratio18_1, false);
 motor topleft = motor(PORT11, ratio18_1, true);
-motor topright = motor(PORT12, ratio18_1, false);
 motor middleleft = motor(PORT9, ratio18_1, true);
-motor middleright = motor(PORT10, ratio18_1, false);
+
+motor bottomright = motor(PORT14, ratio18_1, false);
+motor topright = motor(PORT12, ratio18_1, false);
+motor middleright = motor(PORT10, ratio18_1, true);
 
 motor intake1 = motor(PORT15, ratio18_1, false);
 motor intake2 = motor(PORT16, ratio18_1, true);
 motor intake3 = motor(PORT17, ratio18_1, true);
-motor intake3 = motor(PORT18, ratio18_1, true);
+motor intake4 = motor(PORT18, ratio18_1, true);
 
 controller Controller = controller(primary);
 
@@ -55,16 +56,70 @@ void useClinch() {
   //clinch->set(!clinch->value());
 }
 
-void spinIntake(){
-  //intake.spin(forward);
+void toBasket(){
+  intake3.setVelocity(100,percent);
+  intake1.setVelocity(80,percent);
+  intake2.setVelocity(80,percent);
+  intake3.spin(reverse);
+  intake1.spin(forward);
+  intake2.spin(forward);
 }
 
-void reverseIntake(){
-  //intake.spin(reverse);
+void stopBasket(){
+  intake3.stop();
+  intake1.stop();
+  intake2.stop();
 }
 
-void stopIntake(){
-  //intake.stop();
+void basketToBottom(){
+  intake3.setVelocity(100,percent);
+  intake1.setVelocity(80,percent);
+  intake2.setVelocity(80,percent);
+  intake3.spin(forward);
+  intake1.spin(reverse);
+  intake2.spin(reverse);
+}
+
+void stopBottom(){
+  intake3.stop();
+  intake1.stop();
+  intake2.stop();
+}
+
+void basketToTop(){
+  intake3.setVelocity(100,percent);
+  intake2.setVelocity(100,percent);
+  intake4.setVelocity(100,percent);
+  intake1.setVelocity(30,percent);
+  intake3.spin(reverse);
+  intake4.spin(forward);
+  intake1.spin(reverse);
+  intake2.spin(reverse);
+}
+
+void stopTop(){
+  intake3.stop();
+  intake4.stop();
+  intake1.stop();
+  intake2.stop();
+}
+
+void basketToMiddle(){
+  intake3.setVelocity(100,percent);
+  intake2.setVelocity(100,percent);
+  intake4.setVelocity(100,percent);
+  intake1.setVelocity(30,percent);
+  intake3.spin(reverse);
+  intake4.spin(reverse);
+  intake1.spin(reverse);
+  intake2.spin(reverse);
+}
+
+void stopMiddle(){
+  intake3.stop();
+  intake4.stop();
+  intake1.stop();
+  intake2.stop();
 }
 
 void pre_auton(void) {
@@ -73,6 +128,9 @@ void pre_auton(void) {
   leftmotors.setStopping(brake);
   rightmotors.setStopping(brake);
 
+  leftmotors.setVelocity(100,percent);
+  rightmotors.setVelocity(100,percent);
+
   //intake.setVelocity(100,percent);
 
   //clinch->set(true);
@@ -80,10 +138,17 @@ void pre_auton(void) {
   Controller.ButtonLeft.pressed(switchtype);
   //Controller.ButtonL1.pressed(useClinch);
 
-  Controller.ButtonR1.pressed(spinIntake);
-  Controller.ButtonR1.released(stopIntake);
-  Controller.ButtonR2.pressed(reverseIntake);
-  Controller.ButtonR2.released(stopIntake);
+  Controller.ButtonL1.pressed(toBasket);
+  Controller.ButtonL1.released(stopBasket);
+
+  Controller.ButtonR1.pressed(basketToTop);
+  Controller.ButtonR1.released(stopTop);
+
+  Controller.ButtonR2.pressed(basketToMiddle);
+  Controller.ButtonR2.released(stopMiddle);
+
+  Controller.ButtonL2.pressed(basketToBottom);
+  Controller.ButtonL2.released(stopBottom);
 }
 
 void autonomous(void) {
@@ -93,23 +158,17 @@ void autonomous(void) {
 void usercontrol(void) {
   while (1) {
     if (tank) {
-      bottomleft.setVelocity(Controller.Axis3.position(), percent);
-      topleft.setVelocity(Controller.Axis3.position(), percent);
-      topright.setVelocity(Controller.Axis2.position(), percent);
-      bottomright.setVelocity(Controller.Axis2.position(), percent);
+      leftmotors.setVelocity(Controller.Axis3.position(), percent);
+      rightmotors.setVelocity(Controller.Axis2.position(), percent);
     } else {
       leftvalue = (Controller.Axis4.position() + Controller.Axis3.position());
       rightvalue = (Controller.Axis4.position() - Controller.Axis3.position()) * -1;
-      bottomleft.setVelocity(leftvalue, percent);
-      topleft.setVelocity(leftvalue, percent);
-      topright.setVelocity(rightvalue, percent);
-      bottomright.setVelocity(rightvalue, percent);
+      leftmotors.setVelocity(leftvalue, percent);
+      rightmotors.setVelocity(rightvalue, percent);
     }
 
-    bottomleft.spin(forward);
-    bottomright.spin(forward);
-    topleft.spin(forward);
-    topright.spin(forward);
+    leftmotors.spin(forward);
+    rightmotors.spin(forward);
 
     wait(20, msec); 
   }
